@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Profile — {% if is_live %}{{ customer.name }}{% else %}Customer #{{ customer.CustomerID }}{% endif %}{% endblock %}
+{% block header_title %}Customer Profile & History{% endblock %}
+
+{% block content %}
+<div class="mb-4 d-flex justify-content-between align-items-center">
+  <a href="{% url 'customers' %}" class="text-secondary text-decoration-none small">
+    <i class="fa-solid fa-arrow-left me-1"></i> Back to Customers Directory
+  </a>
+
+  {% if is_live %}
+  <a href="{% url 'record_purchase' %}?customer_id={{ customer.customer_id }}" class="btn btn-success btn-sm fw-bold">
+    <i class="fa-solid fa-cart-plus me-1"></i> Record New Purchase
+  </a>
+  {% endif %}
+</div>
+
+{% if is_live %}
+<!-- Live Business Customer Header Card -->
+<div class="card-custom mb-4 border-primary border-opacity-25">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 pb-3 border-bottom border-slate-200">
+    <div>
+      <span class="badge bg-primary mb-1">Live Business Customer</span>
+      <h2 class="fw-bold mb-0 text-dark">{{ customer.name }}</h2>
+      <div class="text-secondary small mt-1">
+        <span class="me-3"><i class="fa-solid fa-id-card me-1 text-primary"></i>Customer ID: <strong>{{ customer.customer_id }}</strong></span>
+        {% if customer.email %}
+        <span><i class="fa-solid fa-envelope me-1 text-primary"></i>{{ customer.email }}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div>
+      <span class="badge-segment {{ rec_data.badge_class }} fs-6 px-4 py-2">
+        <i class="fa-solid fa-brain me-2"></i>{{ rec_data.segment }}
+      </span>
+    </div>
+  </div>
+
+  <div class="row g-3 text-center">
+    <div class="col-md-2 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Recency</span>
+        <strong class="fs-5 text-dark">
+          {% if rec_data.recency is not None %}{{ rec_data.recency }} days{% else %}N/A{% endif %}
+        </strong>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Frequency</span>
+        <strong class="fs-5 text-dark">{{ rec_data.frequency }} orders</strong>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Total Spend</span>
+        <strong class="fs-5 text-success">£{{ rec_data.monetary|floatformat:2 }}</strong>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Avg Order Value</span>
+        <strong class="fs-5 text-indigo" style="color: #4f46e5;">£{{ rec_data.avg_order_value|floatformat:2 }}</strong>
+      </div>
+    </div>
+    <div class="col-md-3 col-12">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Total Quantity</span>
+        <strong class="fs-5 text-warning">{{ rec_data.total_quantity }} items</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<!-- Historical Customer Header Card -->
+<div class="card-custom mb-4 border-primary border-opacity-25">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 pb-3 border-bottom border-slate-200">
+    <div>
+      <span class="badge bg-secondary mb-1">Historical Dataset Customer</span>
+      <h2 class="fw-bold mb-0 text-dark">Customer #{{ customer.CustomerID }}</h2>
+      <span class="text-secondary small"><i class="fa-solid fa-globe me-1 text-primary"></i>{{ customer.PrimaryCountry }}</span>
+    </div>
+
+    <div>
+      {% if 'High-Value' in customer.Segment %}
+        <span class="badge-segment bg-high-value fs-6 px-4 py-2"><i class="fa-solid fa-gem me-2"></i>{{ customer.Segment }}</span>
+      {% else %}
+        <span class="badge-segment bg-low-activity fs-6 px-4 py-2"><i class="fa-solid fa-user-clock me-2"></i>{{ customer.Segment }}</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row g-3 text-center">
+    <div class="col-md-2 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Recency</span>
+        <strong class="fs-5 text-dark">{{ customer.Recency }} days</strong>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Frequency</span>
+        <strong class="fs-5 text-dark">{{ customer.Frequency }} orders</strong>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Total Spend</span>
+        <strong class="fs-5 text-success">£{{ customer.Monetary }}</strong>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Avg Order Value</span>
+        <strong class="fs-5 text-indigo" style="color: #4f46e5;">£{{ customer.AvgOrderValue }}</strong>
+      </div>
+    </div>
+    <div class="col-md-3 col-12">
+      <div class="p-3 rounded-3 bg-light border">
+        <span class="text-secondary small d-block">Unique Products</span>
+        <strong class="fs-5 text-warning">{{ customer.UniqueProducts }} items</strong>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Recommended Products Section -->
+<div class="card-custom mb-4">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h5 class="fw-bold mb-0 text-dark">
+        <i class="fa-solid fa-wand-magic-sparkles me-2 text-success"></i>
+        {% if is_live %}{{ rec_data.recommendation_label }}{% else %}Recommended Products for #{{ customer.CustomerID }}{% endif %}
+      </h5>
+      {% if is_live and rec_data.cold_start %}
+      <small class="text-warning fw-semibold"><i class="fa-solid fa-triangle-exclamation me-1"></i>New / Limited History Customer — Popular product recommendations shown until more history is recorded.</small>
+      {% endif %}
+    </div>
+    <span class="badge px-3 py-1 fw-semibold" style="background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0;">ML Output</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-light-custom align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Stock Code</th>
+          <th>Product Description</th>
+          <th>Unit Price (£)</th>
+          <th>Popularity / Buyers</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for prod in recommendations %}
+          <tr>
+            <td><code class="text-primary font-monospace fs-6">{{ prod.stock_code }}</code></td>
+            <td class="fw-bold text-dark fs-6">{{ prod.description }}</td>
+            <td class="fw-bold text-success fs-6">£{{ prod.unit_price }}</td>
+            <td class="text-secondary">
+              {% if prod.total_quantity %}
+              {{ prod.total_quantity }} units purchased by {{ prod.unique_buyers }} buyers
+              {% else %}
+              Popular Catalog Product
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4" class="text-center text-secondary py-3">No recommendations available.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Purchase History Table Section -->
+<div class="card-custom">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-receipt me-2 text-primary"></i>Purchase History</h5>
+    {% if is_live %}
+    <small class="text-muted"><i class="fa-solid fa-database me-1"></i>Stored in Live Database</small>
+    {% else %}
+    <small class="text-muted"><i class="fa-solid fa-file-excel me-1"></i>Historical Reference Dataset</small>
+    {% endif %}
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-light-custom align-middle mb-0">
+      <thead>
+        {% if is_live %}
+        <tr>
+          <th>Purchase Date</th>
+          <th>Stock Code</th>
+          <th>Product Description</th>
+          <th>Quantity</th>
+          <th>Unit Price (£)</th>
+          <th>Total Amount (£)</th>
+        </tr>
+        {% else %}
+        <tr>
+          <th>Stock Code</th>
+          <th>Product Description</th>
+          <th>Total Quantity</th>
+          <th>Total Spend (£)</th>
+          <th>Order Count</th>
+          <th>Last Order Timestamp</th>
+        </tr>
+        {% endif %}
+      </thead>
+      <tbody>
+        {% if is_live %}
+          {% for p in history %}
+            <tr>
+              <td class="small text-secondary">{{ p.date|date:"Y-m-d H:i" }}</td>
+              <td><code class="text-primary font-monospace">{{ p.stock_code }}</code></td>
+              <td class="fw-bold text-dark">{{ p.description }}</td>
+              <td>{{ p.quantity }}</td>
+              <td>£{{ p.unit_price|floatformat:2 }}</td>
+              <td class="fw-bold text-success">£{{ p.total_amount|floatformat:2 }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-secondary py-4">
+                <i class="fa-solid fa-basket-shopping text-muted fs-3 d-block mb-2"></i>
+                No purchase transactions recorded yet for this customer.
+                <div class="mt-2">
+                  <a href="{% url 'record_purchase' %}?customer_id={{ customer.customer_id }}" class="btn btn-sm btn-success fw-bold">
+                    <i class="fa-solid fa-cart-plus me-1"></i>Record First Purchase
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+
+        {% else %}
+          {% for item in history %}
+            <tr>
+              <td><code class="text-primary font-monospace">{{ item.stock_code }}</code></td>
+              <td class="fw-bold text-dark">{{ item.description }}</td>
+              <td>{{ item.total_quantity }}</td>
+              <td class="fw-bold text-success">£{{ item.total_spend }}</td>
+              <td>{{ item.order_count }} orders</td>
+              <td class="text-secondary small">{{ item.last_date }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-secondary py-4">No purchase history records found.</td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

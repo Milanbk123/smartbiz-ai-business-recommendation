@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Dashboard{% endblock %} — SmartBiz AI</title>
+
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --card-bg: #ffffff;
+      --sidebar-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-light: #e0e7ff;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 260px;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background-color: var(--sidebar-bg);
+      border-right: 1px solid var(--border-color);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .sidebar-brand {
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #4f46e5, #2563eb);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    .nav-links {
+      padding: 20px 12px;
+      list-style: none;
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    .nav-item {
+      margin-bottom: 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text-main);
+      background-color: #f1f5f9;
+    }
+
+    .nav-link.active {
+      color: #ffffff;
+      background-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .nav-link i {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content Wrapper */
+    .main-wrapper {
+      margin-left: 260px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      height: 70px;
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+
+    .content-area {
+      padding: 32px;
+      flex-grow: 1;
+    }
+
+    /* Cards */
+    .card-custom {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    .badge-segment {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .bg-high-value {
+      background-color: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .bg-low-activity {
+      background-color: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    /* Tables */
+    .table-light-custom {
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+
+    .table-light-custom th {
+      background-color: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table-light-custom td {
+      border-color: var(--border-color);
+      vertical-align: middle;
+      font-size: 14px;
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-brain"></i>
+      </div>
+      <div>
+        <h6 class="fw-bold mb-0 text-dark">SmartBiz AI</h6>
+        <small class="text-secondary" style="font-size: 11px;">ML Recommendation</small>
+      </div>
+    </div>
+
+    <ul class="nav-links">
+      <li class="nav-item">
+        <a href="{% url 'dashboard' %}" class="nav-link {% if page == 'dashboard' %}active{% endif %}">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'prediction' %}" class="nav-link {% if page == 'prediction' %}active{% endif %}">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Get Prediction
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'customers' %}" class="nav-link {% if page == 'customers' %}active{% endif %}">
+          <i class="fa-solid fa-users"></i> Customers
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'add_customer' %}" class="nav-link {% if page == 'add_customer' %}active{% endif %}">
+          <i class="fa-solid fa-user-plus"></i> Add Customer
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'record_purchase' %}" class="nav-link {% if page == 'record_purchase' %}active{% endif %}">
+          <i class="fa-solid fa-cart-plus"></i> Record Purchase
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'history' %}" class="nav-link {% if page == 'history' %}active{% endif %}">
+          <i class="fa-solid fa-clock-rotate-left"></i> Recommendation History
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'analytics' %}" class="nav-link {% if page == 'analytics' %}active{% endif %}">
+          <i class="fa-solid fa-chart-line"></i> Analytics
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'model_info' %}" class="nav-link {% if page == 'model_info' %}active{% endif %}">
+          <i class="fa-solid fa-microchip"></i> ML Model
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'about' %}" class="nav-link {% if page == 'about' %}active{% endif %}">
+          <i class="fa-solid fa-circle-info"></i> About
+        </a>
+      </li>
+    </ul>
+
+
+    <div class="p-3 border-top border-slate-200">
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background-color: #e0e7ff; color: #4f46e5; font-size: 16px;">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div class="flex-grow-1 overflow-hidden">
+          <div class="text-dark small fw-bold text-truncate" title="{{ request.user.business_profile.admin_name|default:request.user.username }}">
+            {{ request.user.business_profile.admin_name|default:request.user.first_name|default:request.user.username|default:"Business Owner" }}
+          </div>
+          <div class="text-secondary text-truncate" style="font-size: 11px;" title="{{ request.user.business_profile.business_name|default:'Example Fashion Store' }}">
+            <i class="fa-solid fa-store me-1 text-primary"></i>{{ request.user.business_profile.business_name|default:"Example Fashion Store" }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <header class="header-bar">
+      <div>
+        <h5 class="fw-bold mb-0 text-dark">{% block header_title %}Overview{% endblock %}</h5>
+        <small class="text-secondary"><i class="fa-solid fa-circle text-success me-1" style="font-size: 8px;"></i>Live Data: Online Retail.xlsx</small>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        <div class="d-none d-md-flex align-items-center bg-light border px-3 py-1 rounded-3">
+          <i class="fa-solid fa-briefcase me-2" style="color: #4f46e5;"></i>
+          <div class="text-start">
+            <div class="fw-bold text-dark lh-1" style="font-size: 13px;">{{ request.user.business_profile.business_name|default:"Example Fashion Store" }}</div>
+            <small class="text-secondary" style="font-size: 10px;">Admin: {{ request.user.business_profile.admin_name|default:request.user.first_name|default:request.user.username|default:"Business Owner" }}</small>
+          </div>
+        </div>
+
+        <a href="{% url 'prediction' %}" class="btn btn-primary btn-sm px-3 fw-bold text-white">
+          <i class="fa-solid fa-plus me-1"></i> New Prediction
+        </a>
+
+        <div class="vr bg-secondary opacity-25"></div>
+
+        <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm px-3">
+          <i class="fa-solid fa-power-off me-1"></i> Logout
+        </a>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="content-area">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+        <i class="fa-solid fa-circle-info me-2"></i>{{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+{
+  "dataset_source": "Online Retail.xlsx",
+  "cleaned_rows": 392692,
+  "num_customers": 4338,
+  "features_used": [
+    "Recency",
+    "Frequency",
+    "Monetary"
+  ],
+  "supporting_features": [
+    "TotalQuantity",
+    "AvgOrderValue",
+    "UniqueProducts",
+    "PrimaryCountry"
+  ],
+  "selected_k": 2,
+  "best_silhouette_score": 0.4328,
+  "k_evaluation": [
+    {
+      "k": 2,
+      "inertia": 6483.59,
+      "silhouette_score": 0.4328
+    },
+    {
+      "k": 3,
+      "inertia": 4869.49,
+      "silhouette_score": 0.3365
+    },
+    {
+      "k": 4,
+      "inertia": 3939.05,
+      "silhouette_score": 0.3375
+    },
+    {
+      "k": 5,
+      "inertia": 3296.71,
+      "silhouette_score": 0.3162
+    },
+    {
+      "k": 6,
+      "inertia": 2855.76,
+      "silhouette_score": 0.3124
+    },
+    {
+      "k": 7,
+      "inertia": 2548.82,
+      "silhouette_score": 0.3092
+    },
+    {
+      "k": 8,
+      "inertia": 2336.34,
+      "silhouette_score": 0.3033
+    }
+  ],
+  "cluster_profiles": {
+    "0": {
+      "segment_name": "Low-Activity Customers",
+      "customer_count": 2672,
+      "percentage": 61.6,
+      "avg_recency_days": 134.1,
+      "avg_frequency_orders": 1.7,
+      "avg_monetary_spend": 495.59
+    },
+    "1": {
+      "segment_name": "High-Value Customers",
+      "customer_count": 1666,
+      "percentage": 38.4,
+      "avg_recency_days": 25.9,
+      "avg_frequency_orders": 8.4,
+      "avg_monetary_spend": 4539.6
+    }
+  },
+  "trained_at": "2026-09-29T22:16:00.163956"
+}

@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+{% block title %}Record Purchase{% endblock %}
+{% block header_title %}Record Customer Purchase{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+
+    {% if recorded_transaction %}
+    <div class="alert alert-success p-4 rounded-3 mb-4 shadow-sm">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="rounded-circle bg-white text-success d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; font-size: 20px;">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold mb-0 text-success">Purchase Recorded Successfully!</h5>
+          <small class="text-dark">Transaction saved to live database. Customer RFM and recommendations updated.</small>
+        </div>
+      </div>
+
+      <div class="bg-white p-3 rounded border text-dark mb-3">
+        <div class="row g-2 small">
+          <div class="col-md-3"><strong>Customer:</strong> {{ recorded_transaction.customer.name }} ({{ recorded_transaction.customer.customer_id }})</div>
+          <div class="col-md-4"><strong>Product:</strong> {{ recorded_transaction.product_description }} [{{ recorded_transaction.stock_code }}]</div>
+          <div class="col-md-2"><strong>Qty:</strong> {{ recorded_transaction.quantity }}</div>
+          <div class="col-md-3"><strong>Unit Price:</strong> £{{ recorded_transaction.unit_price|floatformat:2 }} (Total: £{{ recorded_transaction.total_amount|floatformat:2 }})</div>
+          <div class="col-md-12 text-muted mt-1"><strong>Purchase Date:</strong> {{ recorded_transaction.purchase_date|date:"Y-m-d H:i" }}</div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <a href="{% url 'customer_detail' recorded_transaction.customer.customer_id %}" class="btn btn-success btn-sm fw-bold px-3">
+          <i class="fa-solid fa-user me-1"></i>View Profile & Recommendations
+        </a>
+        <a href="{% url 'record_purchase' %}" class="btn btn-outline-dark btn-sm px-3">
+          <i class="fa-solid fa-plus me-1"></i>Record Another Purchase
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card-custom">
+      <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #dcfce7; color: #15803d; font-size: 20px;">
+          <i class="fa-solid fa-cart-plus"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">Record Purchase Transaction</h5>
+          <small class="text-secondary">Store a purchase against a live business customer using real product catalog data.</small>
+        </div>
+      </div>
+
+      <form method="POST" action="{% url 'record_purchase' %}" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            <div><i class="fa-solid fa-triangle-exclamation me-1"></i>{{ error }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="mb-4">
+          <label for="id_select_customer" class="form-label fw-semibold text-dark">
+            Select Customer <span class="text-danger">*</span>
+          </label>
+          {{ form.customer }}
+          {% if form.customer.errors %}
+          <div class="text-danger small mt-1"><i class="fa-solid fa-circle-xmark me-1"></i>{{ form.customer.errors.0 }}</div>
+          {% endif %}
+          <div class="form-text">Don't see your customer? <a href="{% url 'add_customer' %}" class="fw-semibold">Add New Customer</a></div>
+        </div>
+
+        <div class="p-3 bg-light rounded-3 border mb-4">
+          <label class="form-label fw-semibold text-dark mb-2">
+            <i class="fa-solid fa-boxes-stacked me-1 text-primary"></i>Select Real Product from Catalog (Online Retail.xlsx)
+          </label>
+          <div class="input-group mb-2">
+            <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-secondary"></i></span>
+            <input type="text" id="catalog_search_input" class="form-control" placeholder="Search real product description or stock code...">
+          </div>
+
+          <div id="catalog_suggestions" class="list-group overflow-auto max-h-48 border rounded shadow-sm bg-white" style="max-height: 180px; display: none;"></div>
+
+          <div class="mt-2">
+            <small class="text-muted d-block mb-1 fw-semibold">Quick Select Popular Items:</small>
+            <div class="d-flex flex-wrap gap-1">
+              {% for item in product_suggestions|slice:":6" %}
+              <button type="button" class="btn btn-outline-secondary btn-sm text-start btn-quick-prod" 
+                      data-stock="{{ item.stock_code }}" 
+                      data-desc="{{ item.description }}" 
+                      data-price="{{ item.unit_price }}"
+                      style="font-size: 11px;">
+                <i class="fa-solid fa-tag me-1 text-primary"></i>{{ item.description|truncatechars:28 }} (£{{ item.unit_price }})
+              </button>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="id_stock_code" class="form-label fw-semibold text-dark">Stock Code <span class="text-danger">*</span></label>
+            {{ form.stock_code }}
+            {% if form.stock_code.errors %}
+            <div class="text-danger small mt-1"><i class="fa-solid fa-circle-xmark me-1"></i>{{ form.stock_code.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-8 mb-3">
+            <label for="id_product_description" class="form-label fw-semibold text-dark">Product Description <span class="text-danger">*</span></label>
+            {{ form.product_description }}
+            {% if form.product_description.errors %}
+            <div class="text-danger small mt-1"><i class="fa-solid fa-circle-xmark me-1"></i>{{ form.product_description.errors.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="id_quantity" class="form-label fw-semibold text-dark">Quantity <span class="text-danger">*</span></label>
+            {{ form.quantity }}
+            {% if form.quantity.errors %}
+            <div class="text-danger small mt-1"><i class="fa-solid fa-circle-xmark me-1"></i>{{ form.quantity.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="id_unit_price" class="form-label fw-semibold text-dark">Unit Price (£) <span class="text-danger">*</span></label>
+            {{ form.unit_price }}
+            {% if form.unit_price.errors %}
+            <div class="text-danger small mt-1"><i class="fa-solid fa-circle-xmark me-1"></i>{{ form.unit_price.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="id_purchase_date" class="form-label fw-semibold text-dark">Purchase Date</label>
+            {{ form.purchase_date }}
+            {% if form.purchase_date.errors %}
+            <div class="text-danger small mt-1"><i class="fa-solid fa-circle-xmark me-1"></i>{{ form.purchase_date.errors.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mt-4">
+          <button type="submit" class="btn btn-success px-4 fw-bold">
+            <i class="fa-solid fa-floppy-disk me-2"></i>Save Purchase
+          </button>
+          <a href="{% url 'customers' %}" class="btn btn-outline-secondary px-4">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('catalog_search_input');
+  const suggestionsBox = document.getElementById('catalog_suggestions');
+  const stockInput = document.getElementById('id_stock_code');
+  const descInput = document.getElementById('id_product_description');
+  const priceInput = document.getElementById('id_unit_price');
+
+  // Quick select buttons
+  document.querySelectorAll('.btn-quick-prod').forEach(btn => {
+    btn.addEventListener('click', function() {
+      stockInput.value = this.dataset.stock;
+      descInput.value = this.dataset.desc;
+      priceInput.value = this.dataset.price;
+    });
+  });
+
+  // Autocomplete search
+  let debounceTimer;
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      const query = this.value.trim();
+      if (query.length < 2) {
+        suggestionsBox.style.display = 'none';
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        fetch("{% url 'api_products' %}?q=" + encodeURIComponent(query))
+          .then(res => res.json())
+          .then(data => {
+            if (data.products && data.products.length > 0) {
+              let html = '';
+              data.products.forEach(p => {
+                html += `<button type="button" class="list-group-item list-group-item-action py-2 suggestion-item" data-stock="${p.stock_code}" data-desc="${p.description}" data-price="${p.unit_price}">
+                  <div class="d-flex justify-content-between">
+                    <span class="fw-bold small text-dark">${p.description}</span>
+                    <span class="badge bg-light text-primary">£${p.unit_price}</span>
+                  </div>
+                  <small class="text-muted">Stock Code: ${p.stock_code}</small>
+                </button>`;
+              });
+              suggestionsBox.innerHTML = html;
+              suggestionsBox.style.display = 'block';
+
+              document.querySelectorAll('.suggestion-item').forEach(item => {
+                item.addEventListener('click', function() {
+                  stockInput.value = this.dataset.stock;
+                  descInput.value = this.dataset.desc;
+                  priceInput.value = this.dataset.price;
+                  suggestionsBox.style.display = 'none';
+                  searchInput.value = this.dataset.desc;
+                });
+              });
+            } else {
+              suggestionsBox.innerHTML = '<div class="p-2 text-muted small">No matching product found.</div>';
+              suggestionsBox.style.display = 'block';
+            }
+          });
+      }, 300);
+    });
+  }
+});
+</script>
+{% endblock %}

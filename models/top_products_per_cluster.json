@@ -1,0 +1,406 @@
+{
+  "0": [
+    {
+      "stock_code": "85123A",
+      "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+      "total_quantity": 4494,
+      "total_orders": 474,
+      "unique_buyers": 365,
+      "unit_price": 2.92
+    },
+    {
+      "stock_code": "22423",
+      "description": "REGENCY CAKESTAND 3 TIER",
+      "total_quantity": 1477,
+      "total_orders": 413,
+      "unique_buyers": 351,
+      "unit_price": 12.62
+    },
+    {
+      "stock_code": "84879",
+      "description": "ASSORTED COLOUR BIRD ORNAMENT",
+      "total_quantity": 5190,
+      "total_orders": 343,
+      "unique_buyers": 280,
+      "unit_price": 1.69
+    },
+    {
+      "stock_code": "47566",
+      "description": "PARTY BUNTING",
+      "total_quantity": 2202,
+      "total_orders": 322,
+      "unique_buyers": 280,
+      "unit_price": 4.91
+    },
+    {
+      "stock_code": "21034",
+      "description": "REX CASH+CARRY JUMBO SHOPPER",
+      "total_quantity": 672,
+      "total_orders": 299,
+      "unique_buyers": 245,
+      "unit_price": 0.95
+    },
+    {
+      "stock_code": "22720",
+      "description": "SET OF 3 CAKE TINS PANTRY DESIGN",
+      "total_quantity": 1053,
+      "total_orders": 263,
+      "unique_buyers": 241,
+      "unit_price": 4.93
+    },
+    {
+      "stock_code": "22138",
+      "description": "BAKING SET 9 PIECE RETROSPOT",
+      "total_quantity": 987,
+      "total_orders": 260,
+      "unique_buyers": 234,
+      "unit_price": 4.94
+    },
+    {
+      "stock_code": "22960",
+      "description": "JAM MAKING SET WITH JARS",
+      "total_quantity": 1481,
+      "total_orders": 244,
+      "unique_buyers": 226,
+      "unit_price": 4.18
+    },
+    {
+      "stock_code": "22469",
+      "description": "HEART OF WICKER SMALL",
+      "total_quantity": 2539,
+      "total_orders": 243,
+      "unique_buyers": 220,
+      "unit_price": 1.64
+    },
+    {
+      "stock_code": "22457",
+      "description": "NATURAL SLATE HEART CHALKBOARD",
+      "total_quantity": 1729,
+      "total_orders": 244,
+      "unique_buyers": 215,
+      "unit_price": 2.94
+    },
+    {
+      "stock_code": "22086",
+      "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+      "total_quantity": 1931,
+      "total_orders": 220,
+      "unique_buyers": 209,
+      "unit_price": 2.92
+    },
+    {
+      "stock_code": "85099B",
+      "description": "JUMBO BAG RED RETROSPOT",
+      "total_quantity": 4226,
+      "total_orders": 256,
+      "unique_buyers": 202,
+      "unit_price": 2.03
+    },
+    {
+      "stock_code": "21212",
+      "description": "PACK OF 72 RETROSPOT CAKE CASES",
+      "total_quantity": 5148,
+      "total_orders": 222,
+      "unique_buyers": 199,
+      "unit_price": 0.54
+    },
+    {
+      "stock_code": "22961",
+      "description": "JAM MAKING SET PRINTED",
+      "total_quantity": 2451,
+      "total_orders": 216,
+      "unique_buyers": 199,
+      "unit_price": 1.45
+    },
+    {
+      "stock_code": "22470",
+      "description": "HEART OF WICKER LARGE",
+      "total_quantity": 1299,
+      "total_orders": 218,
+      "unique_buyers": 190,
+      "unit_price": 2.94
+    },
+    {
+      "stock_code": "22139",
+      "description": "RETROSPOT TEA SET CERAMIC 11 PC",
+      "total_quantity": 734,
+      "total_orders": 204,
+      "unique_buyers": 190,
+      "unit_price": 4.94
+    },
+    {
+      "stock_code": "21790",
+      "description": "VINTAGE SNAP CARDS",
+      "total_quantity": 2413,
+      "total_orders": 184,
+      "unique_buyers": 168,
+      "unit_price": 0.85
+    },
+    {
+      "stock_code": "POST",
+      "description": "POSTAGE",
+      "total_quantity": 570,
+      "total_orders": 240,
+      "unique_buyers": 167,
+      "unit_price": 27.22
+    },
+    {
+      "stock_code": "22969",
+      "description": "HOMEMADE JAM SCENTED CANDLES",
+      "total_quantity": 2415,
+      "total_orders": 172,
+      "unique_buyers": 166,
+      "unit_price": 1.45
+    },
+    {
+      "stock_code": "23298",
+      "description": "SPOTTY BUNTING",
+      "total_quantity": 732,
+      "total_orders": 178,
+      "unique_buyers": 166,
+      "unit_price": 4.95
+    },
+    {
+      "stock_code": "22699",
+      "description": "ROSES REGENCY TEACUP AND SAUCER",
+      "total_quantity": 1335,
+      "total_orders": 166,
+      "unique_buyers": 150,
+      "unit_price": 2.91
+    },
+    {
+      "stock_code": "20728",
+      "description": "LUNCH BAG CARS BLUE",
+      "total_quantity": 2043,
+      "total_orders": 177,
+      "unique_buyers": 149,
+      "unit_price": 1.65
+    },
+    {
+      "stock_code": "22077",
+      "description": "6 RIBBONS RUSTIC CHARM",
+      "total_quantity": 1389,
+      "total_orders": 153,
+      "unique_buyers": 146,
+      "unit_price": 1.76
+    },
+    {
+      "stock_code": "22697",
+      "description": "GREEN REGENCY TEACUP AND SAUCER",
+      "total_quantity": 1176,
+      "total_orders": 161,
+      "unique_buyers": 146,
+      "unit_price": 2.91
+    },
+    {
+      "stock_code": "22382",
+      "description": "LUNCH BAG SPACEBOY DESIGN",
+      "total_quantity": 1608,
+      "total_orders": 168,
+      "unique_buyers": 143,
+      "unit_price": 1.65
+    }
+  ],
+  "1": [
+    {
+      "stock_code": "22423",
+      "description": "REGENCY CAKESTAND 3 TIER",
+      "total_quantity": 10897,
+      "total_orders": 1290,
+      "unique_buyers": 530,
+      "unit_price": 12.44
+    },
+    {
+      "stock_code": "85123A",
+      "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+      "total_quantity": 32212,
+      "total_orders": 1497,
+      "unique_buyers": 491,
+      "unit_price": 2.88
+    },
+    {
+      "stock_code": "21212",
+      "description": "PACK OF 72 RETROSPOT CAKE CASES",
+      "total_quantity": 28522,
+      "total_orders": 807,
+      "unique_buyers": 436,
+      "unit_price": 0.55
+    },
+    {
+      "stock_code": "85099B",
+      "description": "JUMBO BAG RED RETROSPOT",
+      "total_quantity": 41852,
+      "total_orders": 1344,
+      "unique_buyers": 433,
+      "unit_price": 2.01
+    },
+    {
+      "stock_code": "47566",
+      "description": "PARTY BUNTING",
+      "total_quantity": 13077,
+      "total_orders": 1057,
+      "unique_buyers": 428,
+      "unit_price": 4.87
+    },
+    {
+      "stock_code": "23298",
+      "description": "SPOTTY BUNTING",
+      "total_quantity": 6901,
+      "total_orders": 825,
+      "unique_buyers": 405,
+      "unit_price": 4.91
+    },
+    {
+      "stock_code": "22086",
+      "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+      "total_quantity": 13660,
+      "total_orders": 760,
+      "unique_buyers": 404,
+      "unit_price": 2.94
+    },
+    {
+      "stock_code": "22720",
+      "description": "SET OF 3 CAKE TINS PANTRY DESIGN",
+      "total_quantity": 5957,
+      "total_orders": 883,
+      "unique_buyers": 399,
+      "unit_price": 4.96
+    },
+    {
+      "stock_code": "84879",
+      "description": "ASSORTED COLOUR BIRD ORNAMENT",
+      "total_quantity": 30073,
+      "total_orders": 1032,
+      "unique_buyers": 398,
+      "unit_price": 1.68
+    },
+    {
+      "stock_code": "20725",
+      "description": "LUNCH BAG RED RETROSPOT",
+      "total_quantity": 15775,
+      "total_orders": 1115,
+      "unique_buyers": 390,
+      "unit_price": 1.66
+    },
+    {
+      "stock_code": "22457",
+      "description": "NATURAL SLATE HEART CHALKBOARD",
+      "total_quantity": 6698,
+      "total_orders": 723,
+      "unique_buyers": 372,
+      "unit_price": 2.99
+    },
+    {
+      "stock_code": "23245",
+      "description": "SET OF 3 REGENCY CAKE TINS",
+      "total_quantity": 5279,
+      "total_orders": 602,
+      "unique_buyers": 360,
+      "unit_price": 4.94
+    },
+    {
+      "stock_code": "22469",
+      "description": "HEART OF WICKER SMALL",
+      "total_quantity": 14229,
+      "total_orders": 718,
+      "unique_buyers": 353,
+      "unit_price": 1.64
+    },
+    {
+      "stock_code": "23084",
+      "description": "RABBIT NIGHT LIGHT",
+      "total_quantity": 26033,
+      "total_orders": 690,
+      "unique_buyers": 349,
+      "unit_price": 2.01
+    },
+    {
+      "stock_code": "22382",
+      "description": "LUNCH BAG SPACEBOY DESIGN",
+      "total_quantity": 8267,
+      "total_orders": 820,
+      "unique_buyers": 347,
+      "unit_price": 1.66
+    },
+    {
+      "stock_code": "22960",
+      "description": "JAM MAKING SET WITH JARS",
+      "total_quantity": 6659,
+      "total_orders": 634,
+      "unique_buyers": 347,
+      "unit_price": 4.18
+    },
+    {
+      "stock_code": "22138",
+      "description": "BAKING SET 9 PIECE RETROSPOT",
+      "total_quantity": 3799,
+      "total_orders": 594,
+      "unique_buyers": 347,
+      "unit_price": 5.01
+    },
+    {
+      "stock_code": "23355",
+      "description": "HOT WATER BOTTLE KEEP CALM",
+      "total_quantity": 4572,
+      "total_orders": 579,
+      "unique_buyers": 341,
+      "unit_price": 4.86
+    },
+    {
+      "stock_code": "22961",
+      "description": "JAM MAKING SET PRINTED",
+      "total_quantity": 12588,
+      "total_orders": 652,
+      "unique_buyers": 338,
+      "unit_price": 1.48
+    },
+    {
+      "stock_code": "22910",
+      "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+      "total_quantity": 8367,
+      "total_orders": 553,
+      "unique_buyers": 331,
+      "unit_price": 2.94
+    },
+    {
+      "stock_code": "20727",
+      "description": "LUNCH BAG  BLACK SKULL.",
+      "total_quantity": 9771,
+      "total_orders": 902,
+      "unique_buyers": 330,
+      "unit_price": 1.64
+    },
+    {
+      "stock_code": "20728",
+      "description": "LUNCH BAG CARS BLUE",
+      "total_quantity": 8746,
+      "total_orders": 789,
+      "unique_buyers": 330,
+      "unit_price": 1.66
+    },
+    {
+      "stock_code": "22666",
+      "description": "RECIPE BOX PANTRY YELLOW DESIGN",
+      "total_quantity": 6586,
+      "total_orders": 669,
+      "unique_buyers": 329,
+      "unit_price": 2.97
+    },
+    {
+      "stock_code": "22384",
+      "description": "LUNCH BAG PINK POLKADOT",
+      "total_quantity": 8919,
+      "total_orders": 777,
+      "unique_buyers": 315,
+      "unit_price": 1.65
+    },
+    {
+      "stock_code": "22993",
+      "description": "SET OF 4 PANTRY JELLY MOULDS",
+      "total_quantity": 10596,
+      "total_orders": 721,
+      "unique_buyers": 305,
+      "unit_price": 1.26
+    }
+  ]
+}

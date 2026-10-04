@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}ML Model Info{% endblock %}
+{% block header_title %}Machine Learning Architecture{% endblock %}
+
+{% block content %}
+<!-- Overview Card -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="card-custom h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <span class="badge px-3 py-1 mb-2 fw-semibold" style="background-color: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe;">Unsupervised Learning</span>
+          <h4 class="fw-bold mb-1 text-dark">K-Means Clustering Pipeline</h4>
+          <p class="text-secondary small mb-0">RFM Customer Segmentation & Product Recommendation Engine</p>
+        </div>
+
+        <div class="text-end">
+          <span class="text-secondary small d-block">Selected Clusters</span>
+          <h2 class="fw-bold text-success mb-0">K = {{ selected_k|default:2 }}</h2>
+        </div>
+      </div>
+
+      <hr class="border-slate-200 my-3">
+
+      <!-- Pipeline Diagram -->
+      <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-diagram-project me-2 text-primary"></i>Pipeline Flow Diagram</h6>
+      <div class="p-3 rounded-3 text-center" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+        <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 small">
+          <span class="px-3 py-2 bg-white text-dark rounded border fw-medium shadow-sm">Online Retail Dataset</span>
+          <i class="fa-solid fa-arrow-right text-secondary"></i>
+          <span class="px-3 py-2 bg-white text-info rounded border fw-medium shadow-sm">Data Cleaning</span>
+          <i class="fa-solid fa-arrow-right text-secondary"></i>
+          <span class="px-3 py-2 bg-white text-primary rounded border fw-medium shadow-sm">RFM Engineering</span>
+          <i class="fa-solid fa-arrow-right text-secondary"></i>
+          <span class="px-3 py-2 bg-white text-warning rounded border fw-medium shadow-sm">Log Scale</span>
+          <i class="fa-solid fa-arrow-right text-secondary"></i>
+          <span class="px-3 py-2 bg-white text-success rounded border fw-medium shadow-sm">K-Means ($K=2$)</span>
+          <i class="fa-solid fa-arrow-right text-secondary"></i>
+          <span class="px-3 py-2 text-white rounded border fw-medium shadow-sm" style="background-color: #4f46e5;">Segmentation & Recommendation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Metrics -->
+  <div class="col-lg-4">
+    <div class="card-custom h-100 d-flex flex-column justify-content-between">
+      <div>
+        <h5 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-square-poll-vertical me-2 text-warning"></i>Model Metrics</h5>
+
+        <div class="mb-3 p-3 rounded-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+          <span class="text-secondary small d-block">Best Silhouette Score</span>
+          <strong class="fs-4 text-success">{{ silhouette_score|default:"0.4328" }}</strong>
+          <span class="text-secondary small d-block mt-1">Measures cluster cohesion & separation</span>
+        </div>
+
+        <div class="mb-3 p-3 rounded-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+          <span class="text-secondary small d-block">Cleaned Training Transactions</span>
+          <strong class="fs-4 text-primary">{{ cleaned_rows|default:"392,692" }}</strong>
+        </div>
+
+        <div class="p-3 rounded-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+          <span class="text-secondary small d-block">Customer Records Evaluated</span>
+          <strong class="fs-4 text-dark">{{ num_customers|default:"4,338" }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features & Evaluation Grid -->
+<div class="row g-4 mb-4">
+  <!-- Features List -->
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-list-check me-2 text-primary"></i>Engineered Feature Matrix</h5>
+
+      <h6 class="text-secondary small text-uppercase fw-bold mb-2">Core RFM Clustering Features:</h6>
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item bg-transparent text-dark border-slate-200 px-0">
+          <i class="fa-solid fa-check text-success me-2"></i><strong>Recency:</strong> Days elapsed since customer's last purchase.
+        </li>
+        <li class="list-group-item bg-transparent text-dark border-slate-200 px-0">
+          <i class="fa-solid fa-check text-success me-2"></i><strong>Frequency:</strong> Total number of invoice orders placed.
+        </li>
+        <li class="list-group-item bg-transparent text-dark border-slate-200 px-0">
+          <i class="fa-solid fa-check text-success me-2"></i><strong>Monetary:</strong> Cumulative spend in GBP (£).
+        </li>
+      </ul>
+
+      <h6 class="text-secondary small text-uppercase fw-bold mb-2">Supporting Customer Attributes:</h6>
+      <div class="d-flex flex-wrap gap-2">
+        {% for feat in supporting_features %}
+          <span class="badge bg-light text-dark border px-3 py-2">{{ feat }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- K Evaluation Grid -->
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-table-cells me-2 text-primary"></i>$K$ Parameter Evaluation Grid</h5>
+
+      <div class="table-responsive">
+        <table class="table table-light-custom align-middle mb-0">
+          <thead>
+            <tr>
+              <th>K Clusters</th>
+              <th>Inertia (SSE)</th>
+              <th>Silhouette Score</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in eval_grid %}
+              <tr {% if item.k == selected_k %}class="table-active"{% endif %}>
+                <td class="fw-bold text-dark">K = {{ item.k }}</td>
+                <td>{{ item.inertia }}</td>
+                <td class="fw-bold text-success">{{ item.silhouette_score }}</td>
+                <td>
+                  {% if item.k == selected_k %}
+                    <span class="badge bg-success">Selected Model</span>
+                  {% else %}
+                    <span class="badge bg-light text-secondary border">Evaluated</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td class="fw-bold text-dark">K = 2</td>
+                <td>6483.59</td>
+                <td class="fw-bold text-success">0.4328</td>
+                <td><span class="badge bg-success">Selected Model</span></td>
+              </tr>
+              <tr>
+                <td class="fw-bold text-dark">K = 3</td>
+                <td>4869.49</td>
+                <td>0.3365</td>
+                <td><span class="badge bg-light text-secondary border">Evaluated</span></td>
+              </tr>
+              <tr>
+                <td class="fw-bold text-dark">K = 4</td>
+                <td>3939.05</td>
+                <td>0.3375</td>
+                <td><span class="badge bg-light text-secondary border">Evaluated</span></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Recommendation History{% endblock %}
+{% block header_title %}Recommendation History Log{% endblock %}
+
+{% block content %}
+<div class="card-custom mb-4">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+      <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Saved Prediction History</h5>
+      <p class="text-secondary small mb-0">Total {{ total|default:0 }} recommendation sessions logged</p>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <form method="GET" action="{% url 'history' %}" class="row g-3 mb-4">
+    <div class="col-md-9">
+      <div class="input-group">
+        <span class="input-group-text bg-light border-secondary-subtle text-secondary"><i class="fa-solid fa-search"></i></span>
+        <input type="text" name="search" class="form-control" placeholder="Search by Customer ID (e.g. 17850) or Segment..." value="{{ search }}">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <button type="submit" class="btn btn-primary text-white w-100 fw-bold">Search History</button>
+    </div>
+  </form>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-light-custom align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Customer ID</th>
+          <th>Country</th>
+          <th>Segment</th>
+          <th>Recency</th>
+          <th>Frequency</th>
+          <th>Monetary (£)</th>
+          <th>Recommendations</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in page_obj %}
+          <tr>
+            <td class="text-secondary small">{{ rec.id }}</td>
+            <td class="fw-bold text-primary">#{% if rec.customer_code %}{{ rec.customer_code }}{% else %}{{ rec.customer_id }}{% endif %}</td>
+            <td>{{ rec.country }}</td>
+            <td>
+              {% if 'High-Value' in rec.segment %}
+                <span class="badge-segment bg-high-value">{{ rec.segment }}</span>
+              {% elif 'Low-Activity' in rec.segment %}
+                <span class="badge-segment bg-low-activity">{{ rec.segment }}</span>
+              {% else %}
+                <span class="badge bg-secondary text-white px-2 py-1">{{ rec.segment }}</span>
+              {% endif %}
+            </td>
+            <td>{% if rec.recency %}{{ rec.recency }} days{% else %}0 days{% endif %}</td>
+            <td>{{ rec.frequency }} orders</td>
+            <td class="fw-bold text-success">£{{ rec.monetary }}</td>
+            <td>
+              {% if rec.recommended_products %}
+                <button class="btn btn-outline-primary btn-sm py-0 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#items-{{ rec.id }}">
+                  View {{ rec.recommended_products|length }} Items <i class="fa-solid fa-chevron-down ms-1"></i>
+                </button>
+              {% else %}
+                <span class="text-secondary small">None</span>
+              {% endif %}
+            </td>
+            <td class="text-secondary small">{{ rec.created_at|date:"Y-m-d H:i:s" }}</td>
+          </tr>
+
+          <!-- Expandable Row -->
+          {% if rec.recommended_products %}
+            <tr class="collapse" id="items-{{ rec.id }}">
+              <td colspan="9" class="bg-light p-3">
+                <div class="p-3 border border-secondary-subtle rounded-3 bg-white">
+                  <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-basket-shopping me-2 text-success"></i>Recommended Products for Customer #{% if rec.customer_code %}{{ rec.customer_code }}{% else %}{{ rec.customer_id }}{% endif %}:</h6>
+
+                  <ul class="mb-0 text-secondary small ps-3">
+                    {% for p in rec.recommended_products %}
+                      <li class="mb-1">
+                        <code class="text-primary font-monospace me-2">{{ p.stock_code }}</code>
+                        <strong class="text-dark">{{ p.description }}</strong> —
+                        <span class="text-success fw-bold">£{{ p.unit_price }}</span>
+                        ({{ p.total_quantity }} units bought by {{ p.unique_buyers }} buyers in cluster)
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          {% endif %}
+        {% empty %}
+          <tr>
+            <td colspan="9" class="text-center text-secondary py-4">No recommendation history records found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+    <div class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top border-slate-200">
+      <div class="text-secondary small">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </div>
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search }}">Previous</a></li>
+          {% endif %}
+          <li class="page-item active"><span class="page-link bg-primary border-primary text-white">{{ page_obj.number }}</span></li>
+          {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search }}">Next</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

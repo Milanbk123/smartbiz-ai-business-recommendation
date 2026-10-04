@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}About Project{% endblock %}
+{% block header_title %}Project Documentation{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-12">
+    <!-- Header Banner -->
+    <div class="card-custom mb-4 border-primary border-opacity-25">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="p-3 rounded-3 fs-3" style="background-color: #4f46e5; color: #ffffff;">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <span class="badge px-3 py-1 mb-1 fw-semibold" style="background-color: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe;">IEEE Project #35 — Machine Learning Domain</span>
+          <h3 class="fw-bold mb-1 text-dark">"From Data to Decisions: The Power of Machine Learning in Business Recommendations"</h3>
+          <p class="text-secondary small mb-0">System Name: <strong>SmartBiz AI</strong> | Built with Python, Scikit-Learn, Pandas & Django</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documentation Sections -->
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-bullseye me-2 text-primary"></i>1. Problem Statement</h5>
+      <p class="text-secondary fs-6 leading-relaxed">
+        Modern retail enterprises collect massive transaction volumes daily. However, transforming raw transactional records into actionable customer intelligence and personalized product recommendations remains a key operational challenge. Without automated segmentation, businesses fail to identify VIP customers or deliver targeted recommendations, leading to lower customer retention and missed revenue opportunities.
+      </p>
+
+      <h5 class="fw-bold text-dark mb-3 mt-4"><i class="fa-solid fa-crosshairs me-2 text-success"></i>2. Project Objective</h5>
+      <p class="text-secondary fs-6 leading-relaxed">
+        SmartBiz AI solves this challenge by implementing an end-to-end Machine Learning pipeline using real-world e-commerce transaction data. The primary objective is to automatically segment customers based on behavioral RFM parameters (Recency, Frequency, Monetary) and generate personalized product recommendations to drive business growth.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-database me-2 text-primary"></i>3. Dataset Description</h5>
+      <p class="text-secondary fs-6 leading-relaxed">
+        The project strictly utilizes the authentic <strong>Online Retail.xlsx</strong> dataset, containing 541,909 raw transactions from a UK-based online retail enterprise spanning 373 days across 38 countries.
+      </p>
+      <ul class="text-secondary small ps-3">
+        <li><strong>Original Rows:</strong> 541,909</li>
+        <li><strong>Cleaned Rows:</strong> 392,692</li>
+        <li><strong>Unique Customers:</strong> 4,338</li>
+        <li><strong>Total Revenue:</strong> £8,911,407.90</li>
+        <li><strong>Cleaning Rules Applied:</strong> Excluded missing CustomerIDs, cancelled invoices ('C'), negative quantities/prices, and duplicate records.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+    <div class="card-custom">
+      <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-layer-group me-2 text-warning"></i>4. Machine Learning Methodology</h5>
+
+      <div class="row g-4 mt-1">
+        <div class="col-md-4">
+          <div class="p-3 rounded-3 h-100" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+            <h6 class="fw-bold text-primary mb-2">A. RFM Feature Engineering</h6>
+            <p class="text-secondary small mb-0">
+              Aggregates raw customer transactions into Recency (days since last order), Frequency (unique order count), and Monetary (total spend £), plus supporting metrics like Avg Order Value and Unique Products.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="p-3 rounded-3 h-100" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+            <h6 class="fw-bold text-success mb-2">B. K-Means Clustering</h6>
+            <p class="text-secondary small mb-0">
+              RFM values are log-transformed and standardized. K-Means clustering is evaluated across K=2 to 8. K=2 was selected as the optimal model with a Silhouette Score of <strong>0.4328</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="p-3 rounded-3 h-100" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+            <h6 class="fw-bold text-warning mb-2">C. Recommendation Engine</h6>
+            <p class="text-secondary small mb-0">
+              Implements segment-aware collaborative filtering. Identifies top items popular within the customer's cluster while filtering out items they have already bought.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

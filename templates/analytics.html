@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics{% endblock %}
+{% block header_title %}Business & RFM Analytics{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+  <!-- Chart 1: Segment Distribution -->
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-chart-pie me-2 text-primary"></i>Customer Segment Share</h5>
+      <p class="text-secondary small mb-4">K-Means Customer Distribution</p>
+
+      <div style="height: 280px; position: relative;">
+        <canvas id="chartSegShare"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart 2: Monetary Spend by Segment -->
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-sterling-sign me-2 text-success"></i>Average Spend by Segment (£)</h5>
+      <p class="text-secondary small mb-4">Monetary Value Comparison</p>
+
+      <div style="height: 280px; position: relative;">
+        <canvas id="chartMonetary"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart 3: Order Frequency by Segment -->
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-repeat me-2 text-primary"></i>Average Order Frequency</h5>
+      <p class="text-secondary small mb-4">Invoice Orders per Segment</p>
+
+      <div style="height: 280px; position: relative;">
+        <canvas id="chartFrequency"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart 4: Recency Days by Segment -->
+  <div class="col-lg-6">
+    <div class="card-custom h-100">
+      <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-calendar-day me-2 text-warning"></i>Average Recency Gap (Days)</h5>
+      <p class="text-secondary small mb-4">Days Since Last Purchase</p>
+
+      <div style="height: 280px; position: relative;">
+        <canvas id="chartRecency"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart 5: Country Breakdown -->
+  <div class="col-12">
+    <div class="card-custom">
+      <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-globe me-2 text-primary"></i>Top 10 Customer Countries</h5>
+      <p class="text-secondary small mb-4">Geographic Distribution in Online Retail Dataset</p>
+
+      <div style="height: 320px; position: relative;">
+        <canvas id="chartCountry"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const segLabels = {{ seg_labels|safe }};
+  const segCounts = {{ seg_counts|safe }};
+
+  const monLabels = {{ mon_labels|safe }};
+  const monValues = {{ mon_values|safe }};
+
+  const freqLabels = {{ freq_labels|safe }};
+  const freqValues = {{ freq_values|safe }};
+
+  const recLabels = {{ rec_labels|safe }};
+  const recValues = {{ rec_values|safe }};
+
+  const countryLabels = {{ country_labels|safe }};
+  const countryValues = {{ country_values|safe }};
+
+  // 1. Segment Share
+  new Chart(document.getElementById('chartSegShare').getContext('2d'), {
+    type: 'pie',
+    data: {
+      labels: segLabels,
+      datasets: [{
+        data: segCounts,
+        backgroundColor: ['#f59e0b', '#10b981'],
+        borderColor: '#ffffff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#0f172a' } } }
+    }
+  });
+
+  // 2. Monetary
+  new Chart(document.getElementById('chartMonetary').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: monLabels,
+      datasets: [{
+        label: 'Average Spend (£)',
+        data: monValues,
+        backgroundColor: ['#f59e0b', '#10b981'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } }
+      },
+      plugins: { legend: { labels: { color: '#0f172a' } } }
+    }
+  });
+
+  // 3. Frequency
+  new Chart(document.getElementById('chartFrequency').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: freqLabels,
+      datasets: [{
+        label: 'Average Orders',
+        data: freqValues,
+        backgroundColor: ['#3b82f6', '#4f46e5'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } }
+      },
+      plugins: { legend: { labels: { color: '#0f172a' } } }
+    }
+  });
+
+  // 4. Recency
+  new Chart(document.getElementById('chartRecency').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: recLabels,
+      datasets: [{
+        label: 'Average Recency (Days)',
+        data: recValues,
+        backgroundColor: ['#ef4444', '#f59e0b'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } }
+      },
+      plugins: { legend: { labels: { color: '#0f172a' } } }
+    }
+  });
+
+  // 5. Countries
+  new Chart(document.getElementById('chartCountry').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: countryLabels,
+      datasets: [{
+        label: 'Customer Count',
+        data: countryValues,
+        backgroundColor: '#4f46e5',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } }
+      },
+      plugins: { legend: { labels: { color: '#0f172a' } } }
+    }
+  });
+</script>
+{% endblock %}

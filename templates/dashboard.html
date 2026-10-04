@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block header_title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- Top Metrics Row -->
+<div class="row g-4 mb-4">
+  <!-- Total Customers -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card-custom">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-secondary small fw-medium">Total Customers</span>
+        <div class="p-2 rounded-3" style="background-color: #e0e7ff; color: #4f46e5;">
+          <i class="fa-solid fa-users fa-lg"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold mb-1 text-dark">{{ total_customers|default:"4,338" }}</h3>
+      <div class="text-success small fw-medium">
+        <i class="fa-solid fa-check-double me-1"></i> Cleaned Real Customers
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Transactions -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card-custom">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-secondary small fw-medium">Cleaned Transactions</span>
+        <div class="p-2 rounded-3" style="background-color: #e0f2fe; color: #0284c7;">
+          <i class="fa-solid fa-receipt fa-lg"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold mb-1 text-dark">{{ total_transactions|default:"392,692" }}</h3>
+      <div class="text-info small fw-medium">
+        <i class="fa-solid fa-database me-1"></i> From Online Retail.xlsx
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Revenue -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card-custom">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-secondary small fw-medium">Total Revenue (£)</span>
+        <div class="p-2 rounded-3" style="background-color: #dcfce7; color: #16a34a;">
+          <i class="fa-solid fa-sterling-sign fa-lg"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold mb-1 text-dark">£{{ total_revenue|default:"8,911,407.90" }}</h3>
+      <div class="text-success small fw-medium">
+        <i class="fa-solid fa-arrow-trend-up me-1"></i> Verified Spend Sum
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Products -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card-custom">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-secondary small fw-medium">Distinct Products</span>
+        <div class="p-2 rounded-3" style="background-color: #fef3c7; color: #d97706;">
+          <i class="fa-solid fa-boxes-stacked fa-lg"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold mb-1 text-dark">{{ total_products|default:"3,897" }}</h3>
+      <div class="text-warning small fw-medium">
+        <i class="fa-solid fa-tags me-1"></i> Catalog StockCodes
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Row: Segments & Quick Actions -->
+<div class="row g-4 mb-4">
+  <!-- Customer Segments Card -->
+  <div class="col-lg-7">
+    <div class="card-custom h-100">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+          <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-layer-group me-2 text-indigo" style="color: #4f46e5;"></i>K-Means Customer Segments</h5>
+          <p class="text-secondary small mb-0">Trained on RFM metrics (Recency, Frequency, Monetary)</p>
+        </div>
+        <span class="badge px-3 py-2 fw-semibold" style="background-color: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe;">K = 2 Clusters</span>
+      </div>
+
+      <div class="row align-items-center">
+        <div class="col-md-5 mb-3 mb-md-0 text-center">
+          <div style="max-height: 220px; position: relative;">
+            <canvas id="segmentDoughnutChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-md-7">
+          <div class="table-responsive">
+            <table class="table table-light-custom align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Segment</th>
+                  <th>Count</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for seg_name, info in segment_counts.items %}
+                  <tr>
+                    <td>
+                      {% if 'High-Value' in seg_name %}
+                        <span class="badge-segment bg-high-value"><i class="fa-solid fa-gem me-1"></i>{{ seg_name }}</span>
+                      {% else %}
+                        <span class="badge-segment bg-low-activity"><i class="fa-solid fa-user-clock me-1"></i>{{ seg_name }}</span>
+                      {% endif %}
+                    </td>
+                    <td class="fw-bold text-dark">{{ info.count }}</td>
+                    <td class="text-secondary">{{ info.percent }}%</td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td><span class="badge-segment bg-low-activity">Low-Activity Customers</span></td>
+                    <td class="fw-bold text-dark">2,672</td>
+                    <td class="text-secondary">61.6%</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-segment bg-high-value">High-Value Customers</span></td>
+                    <td class="fw-bold text-dark">1,666</td>
+                    <td class="text-secondary">38.4%</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Action & Model Status Card -->
+  <div class="col-lg-5">
+    <div class="card-custom h-100 d-flex flex-column justify-content-between">
+      <div>
+        <h5 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-bolt me-2 text-warning"></i>Generate Recommendation</h5>
+        <p class="text-secondary small mb-4">
+          Select any real Customer ID from the Online Retail dataset to compute RFM profile and fetch personalized product recommendations.
+        </p>
+
+        <a href="{% url 'prediction' %}" class="btn btn-primary w-100 py-3 fw-bold text-white mb-4">
+          <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Open Recommendation Engine
+        </a>
+      </div>
+
+      <div class="p-3 rounded-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="text-secondary small fw-medium">Active ML Model</span>
+          <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Ready / Trained</span>
+        </div>
+        <div class="d-flex justify-content-between small text-secondary">
+          <span>Algorithm: <strong class="text-dark">K-Means Clustering</strong></span>
+          <span>Silhouette Score: <strong class="text-dark">0.4328</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Predictions Row -->
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card-custom">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-history me-2 text-primary"></i>Recent Recommendation History</h5>
+        <a href="{% url 'history' %}" class="btn btn-outline-secondary btn-sm">View All History</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-light-custom mb-0">
+          <thead>
+            <tr>
+              <th>Customer ID</th>
+              <th>Country</th>
+              <th>Segment</th>
+              <th>Recency</th>
+              <th>Frequency</th>
+              <th>Monetary (£)</th>
+              <th>Top Recommendation</th>
+              <th>Date / Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rec in recent_recs %}
+              <tr>
+                <td><a href="{% url 'customer_detail' rec.customer_code|default:rec.customer_id %}" class="fw-bold text-primary text-decoration-none">{% if rec.customer_code %}{{ rec.customer_code }}{% else %}#{{ rec.customer_id }}{% endif %}</a></td>
+                <td>{{ rec.country }}</td>
+                <td>
+                  {% if 'High-Value' in rec.segment %}
+                    <span class="badge-segment bg-high-value">{{ rec.segment }}</span>
+                  {% else %}
+                    <span class="badge-segment bg-low-activity">{{ rec.segment }}</span>
+                  {% endif %}
+                </td>
+                <td>{{ rec.recency }} days</td>
+                <td>{{ rec.frequency }} orders</td>
+                <td class="fw-bold text-success">£{{ rec.monetary }}</td>
+                <td>
+                  {% if rec.recommended_products %}
+                    <span class="text-truncate d-inline-block text-dark fw-medium" style="max-width: 200px;">
+                      {{ rec.recommended_products.0.description }}
+                    </span>
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </td>
+                <td class="text-secondary small">{{ rec.created_at|date:"M d, Y H:i" }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="8" class="text-center text-secondary py-4">
+                  <i class="fa-solid fa-inbox fa-2x mb-2 d-block opacity-50"></i> No recommendation history saved yet. Go to <a href="{% url 'prediction' %}" class="text-primary fw-bold">Get Prediction</a> to run your first lookup!
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const labels = {{ segment_labels_json|safe }};
+  const dataValues = {{ segment_values_json|safe }};
+
+  const ctx = document.getElementById('segmentDoughnutChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels.length ? labels : ['Low-Activity Customers', 'High-Value Customers'],
+      datasets: [{
+        data: dataValues.length ? dataValues : [2672, 1666],
+        backgroundColor: ['#f59e0b', '#10b981'],
+        borderWidth: 2,
+        borderColor: '#ffffff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      cutout: '70%'
+    }
+  });
+</script>
+{% endblock %}

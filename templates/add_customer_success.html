@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Created{% endblock %}
+{% block header_title %}Customer Created Successfully{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card-custom text-center py-5">
+      <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px; background-color: #dcfce7; color: #16a34a; font-size: 28px;">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+
+      <h4 class="fw-bold text-dark mb-1">Customer Created Successfully!</h4>
+      <p class="text-secondary mb-4">The new business customer has been added to your live system.</p>
+
+      <div class="p-4 bg-light rounded-3 border text-start d-inline-block w-100 max-w-md mb-4" style="max-width: 480px;">
+        <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+          <span class="text-muted small">Customer Name:</span>
+          <span class="fw-bold text-dark">{{ customer.name }}</span>
+        </div>
+        <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+          <span class="text-muted small">Customer ID:</span>
+          <span class="badge bg-primary px-2 py-1">{{ customer.customer_id }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="text-muted small">Email Address:</span>
+          <span class="text-dark fw-medium">{{ customer.email|default:"Not Provided" }}</span>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap justify-content-center gap-3">
+        <a href="{% url 'record_purchase' %}?customer_id={{ customer.customer_id }}" class="btn btn-success px-4 fw-bold">
+          <i class="fa-solid fa-cart-plus me-2"></i>Record Purchase
+        </a>
+        <a href="{% url 'customer_detail' customer.customer_id %}" class="btn btn-outline-primary px-4 fw-bold">
+          <i class="fa-solid fa-user me-2"></i>View Customer Profile
+        </a>
+        <a href="{% url 'customer_detail' customer.customer_id %}" class="btn btn-outline-secondary px-4 fw-bold">
+          <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Get Recommendations
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
